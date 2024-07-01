@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <meta name="robots" content="noindex">
+    <meta name="googlebot" content="noarchive">
+
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.0.0-beta1/css/all.css" integrity="SHA384-ABC123==" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="container">
+        <div class="container-item">
+            <div class="success-container">
+                <div class="success-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M20 4.9L19.1 4 9 14l-3.2-3.2L4.9 12 9 16.1l11-11L20 4.9z"/>
+                    </svg>
+                </div>
+                <h1>Success!</h1>
+                <p>Your have voted successfully.</p>
+            </div>
+        </div>
+    </div>
+
+<style>
+    .container{
+        display: flex;
+        justify-content: center;
+        padding-top: 80px;
+    }
+.container-item {
+    width: 400px;
+    min-height: 250px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+.success-container {
+  text-align: center;
+  transform: translateY(-40px);
+}
+
+.success-icon {
+  width: 100px;
+  height: 90px;
+  margin: 0 auto 20px;
+  background-color: #fff;
+  padding-top: 10px;
+  border-radius: 50%;
+  border: 2px solid rgb(236, 236, 236);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill: #00cc00; /* Change color as needed */
+}
+
+.success-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #333; /* Change color as needed */
+}
+
+p {
+  font-size: 18px;
+  color: #666; /* Change color as needed */
+}
+@media(max-width: 500px){
+    .container-item{
+        width: 90%;
+    }
+}
+
+</style>
+
+
+<script>
+    // Add animation to the success icon
+    const successIcon = document.querySelector('.success-icon svg');
+    successIcon.animate([
+    { transform: 'scale(0)' },
+    { transform: 'scale(1.2)' },
+    { transform: 'scale(1)' }
+    ], {
+    duration: 1000,
+    easing: 'ease-out'
+    });
+
+</script>
+
+</body>
+</html>
